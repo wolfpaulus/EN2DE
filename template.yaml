@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda, translating English to German
+Resources:
+  TranslateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: EN2DE
+      CodeUri: lambda/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Timeout: 30
+      MemorySize: 512
+      Policies:
+        - TranslateFullAccess
+  LogsLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${TranslateFunction}'
+      RetentionInDays: 7
+
+Outputs:
+  TranslateFunction:
+    Description: "Translate EN to DE Lambda Function ARN"
+    Value: !GetAtt TranslateFunction.Arn
